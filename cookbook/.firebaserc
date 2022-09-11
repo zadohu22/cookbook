@@ -1,5 +1,7 @@
 {
   "projects": {
     "default": "cookbook-3b981"
-  }
+  },
+  "targets": {},
+  "etags": {}
 }

@@ -10,6 +10,8 @@
 
 firebase-config.js
 
+key.js
+
 # misc
 .DS_Store
 .env.local

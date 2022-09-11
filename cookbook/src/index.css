@@ -1,3 +1,31 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700;800;900&display=swap');
+
+/* *{
+    border: 1px solid red
+} */
+
+body{
+    height: 100vh;
+    width: 100vw;
+    font-family: 'Raleway', sans-serif;
+}
+
+#root{
+    height: 100vh;
+    width: 100vw;
+}
+
+.bgMobile{
+    background-position: 40% center;
+}
+
+.signInPageTitle{
+    position: absolute;
+    top: 60px;
+    text-decoration: underline;
+}
+
