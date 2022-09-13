@@ -1,18 +1,26 @@
-import React from 'react';
 import key from './key';
+const apiKey = key;
 
-const Api = () => {
-	let apiKey = key;
-	const call = async () => {
-		let request = await fetch(
-			`https://api.spoonacular.com/recipes/complexSearch?apiKey=${apiKey}&query=beef_stew&number=2`
-		);
-		let response = await request.json();
-		let results = response.results;
-		console.log(results[0].title);
-	};
-	call();
-	return <div>Api</div>;
+const api = async (query) => {
+	query = query.replace(/ /g, '_');
+
+	let request = await fetch(
+		`https://api.spoonacular.com/recipes/complexSearch?apiKey=${apiKey}&query=${query}&number=12`
+	);
+	let response = await request.json();
+	let results = response.results;
+	return results;
 };
 
-export default Api;
+const api2 = async (id) => {
+	// let request = await fetch(
+	// 	`https://api.spoonacular.com/recipes/${id}/information?apiKey=${apiKey}&includeNutrition=false`
+	// );
+	let request = await fetch(
+		`https://api.spoonacular.com/recipes/${id}/card?apiKey=${apiKey}`
+	);
+	let response = await request.json();
+	return response;
+};
+
+export { api, api2 };
