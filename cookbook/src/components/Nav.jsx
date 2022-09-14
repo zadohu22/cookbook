@@ -8,7 +8,7 @@ const Nav = (props) => {
 	const handleClick = async () => {
 		await signOut(getAuth());
 		await props.setIsLoggedIn(false);
-		navigate('/', { replace: true });
+		navigate('/');
 	};
 
 	// const auth = getAuth();

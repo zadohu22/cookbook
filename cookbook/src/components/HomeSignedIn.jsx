@@ -1,6 +1,19 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from './Api';
+import {
+	getFirestore,
+	collection,
+	addDoc,
+	query,
+	orderBy,
+	limit,
+	onSnapshot,
+	setDoc,
+	updateDoc,
+	doc,
+	serverTimestamp,
+} from 'firebase/firestore';
 
 const HomeSignedIn = (props) => {
 	let navigate = useNavigate();
@@ -13,6 +26,7 @@ const HomeSignedIn = (props) => {
 		props.setApiData(await api(cleanedQuery));
 		navigate('/searchresults');
 	};
+
 	return (
 		<>
 			<div className='h-[92%] flex flex-col items-center'>

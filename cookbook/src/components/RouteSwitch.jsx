@@ -10,6 +10,7 @@ const RouteSwitch = (props) => {
 	const [apiData, setApiData] = useState([]);
 	const [api2Data, setApi2Data] = useState(0);
 	const [searchQuery, setSearchQuery] = useState('');
+	const [indexOfTargetRecipe, setIndexOfTargetRecipe] = useState({});
 	return (
 		<Routes>
 			<Route
@@ -34,11 +35,21 @@ const RouteSwitch = (props) => {
 						searchQuery={searchQuery}
 						setApi2Data={setApi2Data}
 						api2Data={api2Data}
+						setIndexOfTargetRecipe={setIndexOfTargetRecipe}
 					/>
 				}
 			/>
 
-			<Route path='/recipe' element={<Recipe api2Data={api2Data} />} />
+			<Route
+				path='/recipe'
+				element={
+					<Recipe
+						api2Data={api2Data}
+						apiData={apiData}
+						indexOfTargetRecipe={indexOfTargetRecipe}
+					/>
+				}
+			/>
 			{props.isLoggedIn && (
 				<Route
 					path='/nav'
