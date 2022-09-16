@@ -35,7 +35,7 @@ const Recipe = (props) => {
 		// </div>
 		<div className='flex flex-col justify-center items-center'>
 			<button
-				onClick={saveRecipe(props.indexOfTargetRecipe)}
+				onClick={() => saveRecipe(props.indexOfTargetRecipe)}
 				className='btn btn-primary text-2xl rounded:md w-2/5 mt-8 mb-8'
 			>
 				Add To CookBook

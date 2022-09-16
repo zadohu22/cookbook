@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from './Api';
 import {
@@ -13,9 +13,12 @@ import {
 	updateDoc,
 	doc,
 	serverTimestamp,
+	getDoc,
 } from 'firebase/firestore';
 
 const HomeSignedIn = (props) => {
+	let arr = [];
+
 	let navigate = useNavigate();
 
 	const handleSubmit = async (e) => {
@@ -27,6 +30,29 @@ const HomeSignedIn = (props) => {
 		navigate('/searchresults');
 	};
 
+	// Loads chat messages history and listens for upcoming ones.
+	function loadCookBook() {
+		// Create the query to load the last 12 messages and listen for new ones.
+		const cookBookQuery = query(
+			collection(getFirestore(), 'recipes'),
+			// orderBy('timestamp', 'desc'),
+			limit(10)
+		);
+		// Start listening to the query.
+		onSnapshot(cookBookQuery, function (snapshot) {
+			snapshot.docChanges().forEach(function (change) {
+				if (change.type === 'removed') {
+					//   deleteMessage(change.doc.id);
+				} else {
+					let recipe = change.doc.data();
+					arr.push(recipe);
+					console.log(arr);
+					// displayCookBook(recipe.id, recipe.image, recipe.title);
+				}
+			});
+		});
+	}
+	loadCookBook();
 	return (
 		<>
 			<div className='h-[92%] flex flex-col items-center'>
