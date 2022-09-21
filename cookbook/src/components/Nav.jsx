@@ -7,8 +7,13 @@ const Nav = (props) => {
 	const navigate = useNavigate();
 	const handleClick = async () => {
 		await signOut(getAuth());
-		await props.setIsLoggedIn(false);
+		// await props.setIsLoggedIn(false);
+		localStorage.clear();
 		navigate('/');
+	};
+
+	const handleRouteClick = () => {
+		navigate('/home');
 	};
 
 	// const auth = getAuth();
@@ -25,7 +30,12 @@ const Nav = (props) => {
 	return (
 		<>
 			<div className='navbar bg-primary text-primary-content flex h-[5%] justify-between'>
-				<a className='btn btn-ghost normal-case text-xl'>CookBook</a>
+				<a
+					className='btn btn-ghost normal-case text-xl'
+					onClick={handleRouteClick}
+				>
+					CookBook
+				</a>
 				<a onClick={handleClick} className='btn btn-ghost normal-case text-xl'>
 					Sign Out
 				</a>

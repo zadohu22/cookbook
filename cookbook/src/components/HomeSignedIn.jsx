@@ -15,9 +15,11 @@ import {
 	serverTimestamp,
 	getDoc,
 } from 'firebase/firestore';
+import { render } from '@testing-library/react';
 
 const HomeSignedIn = (props) => {
 	let arr = [];
+	const [recipes, setRecipes] = useState([]);
 
 	let navigate = useNavigate();
 
@@ -30,13 +32,36 @@ const HomeSignedIn = (props) => {
 		navigate('/searchresults');
 	};
 
-	// Loads chat messages history and listens for upcoming ones.
-	function loadCookBook() {
+	// // Loads chat messages history and listens for upcoming ones.
+	// function loadCookBook() {
+	// 	// Create the query to load the last 12 messages and listen for new ones.
+	// 	const cookBookQuery = query(
+	// 		collection(getFirestore(), 'recipes'),
+	// 		// orderBy('timestamp', 'desc'),
+	// 		limit(10)
+	// 	);
+	// 	// Start listening to the query.
+	// 	onSnapshot(cookBookQuery, function (snapshot) {
+	// 		snapshot.docChanges().forEach(function (change) {
+	// 			if (change.type === 'removed') {
+	// 				//   deleteMessage(change.doc.id);
+	// 			} else {
+	// 				let recipe = change.doc.data();
+	// 				arr.push(recipe);
+
+	// 				// displayCookBook(recipe.id, recipe.image, recipe.title);
+	// 			}
+	// 		});
+	// 		console.log(arr);
+	// 	});
+	// }
+
+	useEffect(() => {
 		// Create the query to load the last 12 messages and listen for new ones.
 		const cookBookQuery = query(
 			collection(getFirestore(), 'recipes'),
-			// orderBy('timestamp', 'desc'),
-			limit(10)
+			// orderBy('timestamp'),
+			limit(50)
 		);
 		// Start listening to the query.
 		onSnapshot(cookBookQuery, function (snapshot) {
@@ -46,13 +71,18 @@ const HomeSignedIn = (props) => {
 				} else {
 					let recipe = change.doc.data();
 					arr.push(recipe);
-					console.log(arr);
+					setRecipes((prev) => [...prev, change.doc.data()]);
+					// console.log(change.doc.data());
 					// displayCookBook(recipe.id, recipe.image, recipe.title);
 				}
 			});
 		});
+	}, []);
+
+	function doStuff() {
+		return <h1>r</h1>;
 	}
-	loadCookBook();
+
 	return (
 		<>
 			<div className='h-[92%] flex flex-col items-center'>
@@ -88,6 +118,19 @@ const HomeSignedIn = (props) => {
 					</form>
 				</div>
 				<h1 className='text-3xl mt-4'>Your CookBook</h1>
+				{/* {loadCookBook()} */}
+				<div className='mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 content-center justify-items-center items-center gap-6'>
+					{recipes.map((e) => {
+						return (
+							<div className='flex flex-col justify-center items-center border-2 p-4 rounded-md'>
+								<h3 className='text-lg text-blue-700 hover:cursor-pointer underline mb-4'>
+									{e.title}
+								</h3>
+								<img src={e.image} alt='food' />
+							</div>
+						);
+					})}
+				</div>
 			</div>
 			{/* <Api /> */}
 		</>

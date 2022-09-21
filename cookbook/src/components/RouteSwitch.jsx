@@ -15,8 +15,14 @@ const RouteSwitch = (props) => {
 		<Routes>
 			<Route
 				path='/'
-				element={<HomeSignedOut setIsLoggedIn={props.setIsLoggedIn} />}
+				element={
+					<HomeSignedOut
+						setIsLoggedIn={props.setIsLoggedIn}
+						isLoggedIn={props.isLoggedIn}
+					/>
+				}
 			/>
+
 			<Route
 				path='/home'
 				element={
@@ -50,12 +56,12 @@ const RouteSwitch = (props) => {
 					/>
 				}
 			/>
-			{props.isLoggedIn && (
+			{/* {localStorage.getItem('login') === true && (
 				<Route
 					path='/nav'
 					element={<Nav setIsLoggedIn={props.setIsLoggedIn} />}
 				/>
-			)}
+			)} */}
 		</Routes>
 	);
 };
