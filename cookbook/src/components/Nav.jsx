@@ -1,14 +1,19 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
-import { getAuth, signOut, onAuthStateChanged } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import { UserAuth } from '../context/AuthContext';
 
 const Nav = (props) => {
+	const { logOut, user } = UserAuth();
 	const navigate = useNavigate();
 	const handleClick = async () => {
-		await signOut(getAuth());
+		try {
+			await logOut();
+		} catch (error) {
+			console.log(error);
+		}
+		console.log('logout', user);
 		// await props.setIsLoggedIn(false);
-		localStorage.clear();
 		navigate('/');
 	};
 

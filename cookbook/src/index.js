@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import { HashRouter as Router } from 'react-router-dom';
+import { AuthContextProvider } from './context/AuthContext';
 import './index.css';
 import App from './App';
 import { initializeApp } from 'firebase/app';
@@ -22,7 +23,9 @@ import {
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
 	<>
-		<App />
+		<AuthContextProvider>
+			<App />
+		</AuthContextProvider>
 	</>
 );
 

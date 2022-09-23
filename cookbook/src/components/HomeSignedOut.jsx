@@ -15,16 +15,19 @@ const HomeSignedOut = (props) => {
 	const handleGoogleSignIn = async () => {
 		try {
 			await googleSignIn();
-			navigate('/home');
+			// navigate('/home');
 			console.log(user);
 		} catch (error) {
 			console.log(error);
 		}
 	};
 
-	// useEffect(() => {
-	// 	navigate('/home');
-	// }, [user]);
+	useEffect(() => {
+		if (user != null) {
+			navigate('/home');
+		}
+		console.log(user);
+	}, [user]);
 
 	return (
 		<>

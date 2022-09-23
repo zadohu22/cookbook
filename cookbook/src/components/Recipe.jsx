@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { ingredients, instructions } from './Api';
 import {
 	getFirestore,
 	collection,
@@ -16,6 +17,25 @@ import {
 const Recipe = (props) => {
 	console.log(props.api2Data.url);
 	console.log(props.indexOfTargetRecipe);
+
+	const [food, setFood] = useState([]);
+
+	let ingredientsList = async () => {
+		let data = await ingredients(props.indexOfTargetRecipe.id);
+		setFood(data);
+		console.log('state change');
+		// 	// <div>
+		// 	// 	{data.map((e) => {
+		// 	// 		e.map((i) => {
+		// 	// 			return <p>{i}</p>;
+		// 	// 		});
+		// 	// 	})}
+		// 	// </div>
+		// 	return data;
+	};
+
+	ingredientsList();
+	console.log(food);
 
 	async function saveRecipe(recipeObject) {
 		// Add a new message entry to the Firebase database.
@@ -40,11 +60,12 @@ const Recipe = (props) => {
 			>
 				Add To CookBook
 			</button>
-			<img
+			<img src={props.indexOfTargetRecipe.image} alt='dish' />
+			{/* <img
 				src={props.api2Data.url}
 				className='object-contain h-full w-full'
 				alt='sdf'
-			/>
+			/> */}
 		</div>
 	);
 };

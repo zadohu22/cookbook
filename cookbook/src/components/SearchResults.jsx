@@ -9,8 +9,9 @@ const SearchResults = (props) => {
 
 	const handleClick = async (id, index) => {
 		// console.log(event.target);
-		props.setApi2Data(await api2(id));
+		// props.setApi2Data(await api2(id));
 		props.setIndexOfTargetRecipe(props.apiData[index]);
+		props.setIndexOfTargetRecipe(id);
 		console.log(props.apiData[index]);
 		navigate('/recipe');
 	};

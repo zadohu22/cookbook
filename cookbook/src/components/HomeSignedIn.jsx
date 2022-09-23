@@ -79,10 +79,6 @@ const HomeSignedIn = (props) => {
 		});
 	}, []);
 
-	function doStuff() {
-		return <h1>r</h1>;
-	}
-
 	return (
 		<>
 			<div className='h-[92%] flex flex-col items-center'>

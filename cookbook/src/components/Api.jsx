@@ -23,4 +23,26 @@ const api2 = async (id) => {
 	return response;
 };
 
-export { api, api2 };
+const ingredients = async (id) => {
+	let request = await fetch(
+		`https://api.spoonacular.com/recipes/${id}/ingredientWidget.json?apiKey=${apiKey}`
+	);
+	let response = await request.json();
+	// let steps = response[0].steps;
+	let ingredientsArray = [];
+	let ingredients = response.ingredients.map((e) => {
+		console.log(e.amount.us.value, e.amount.us.unit, e.name);
+		ingredientsArray.push([e.amount.us.value, e.amount.us.unit, e.name]);
+	});
+	return ingredientsArray;
+};
+
+const instructions = async (id) => {
+	let request = await fetch(
+		`https://api.spoonacular.com/recipes/${id}/analyzedInstructions?apiKey=${apiKey}`
+	);
+	let response = await request.json();
+	return response;
+};
+
+export { api, api2, ingredients, instructions };
