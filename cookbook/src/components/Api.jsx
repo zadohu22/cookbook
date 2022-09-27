@@ -5,7 +5,7 @@ const api = async (query) => {
 	query = query.replace(/ /g, '_');
 
 	let request = await fetch(
-		`https://api.spoonacular.com/recipes/complexSearch?apiKey=${apiKey}&query=${query}&number=12`
+		`https://api.spoonacular.com/recipes/complexSearch?apiKey=${apiKey}&query=${query}&number=2`
 	);
 	let response = await request.json();
 	let results = response.results;

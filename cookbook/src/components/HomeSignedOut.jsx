@@ -15,7 +15,7 @@ const HomeSignedOut = (props) => {
 	const handleGoogleSignIn = async () => {
 		try {
 			await googleSignIn();
-			// navigate('/home');
+
 			console.log(user);
 		} catch (error) {
 			console.log(error);
