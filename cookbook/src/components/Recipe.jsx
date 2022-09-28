@@ -12,30 +12,70 @@ import {
 	updateDoc,
 	doc,
 	serverTimestamp,
+	where,
+	getDocs,
 } from 'firebase/firestore';
+import { UserAuth } from '../context/AuthContext';
+import { db } from './firestore';
 
 const Recipe = (props) => {
 	console.log(props.api2Data.url);
 	console.log(props.indexOfTargetRecipe);
 
-	async function saveRecipe(recipeObject, card) {
-		// Add a new message entry to the Firebase database.
+	const { user } = UserAuth();
+
+	console.log(typeof user.uid);
+
+	// async function saveRecipe(recipeObject, card) {
+	// 	// Add a new message entry to the Firebase database.
+	// 	try {
+	// 		await addDoc(collection(getFirestore(), 'users'), {
+	// 			id: recipeObject.id,
+	// 			image: recipeObject.image,
+	// 			title: recipeObject.title,
+	// 			recipeCard: card,
+	// 		});
+	// 	} catch (error) {
+	// 		console.error('Error writing new message to Firebase Database', error);
+	// 	}
+	// }
+	const saveRecipe = async (recipeObject, card) => {
+		let userRef;
 		try {
-			await addDoc(collection(getFirestore(), 'recipes'), {
-				id: recipeObject.id,
+			const currentUser = query(
+				collection(db, 'users'),
+				where('id', '==', `${user.uid}`)
+			);
+
+			const querySnapshot = await getDocs(currentUser);
+			querySnapshot.forEach((doc) => {
+				// doc.data() is never undefined for query doc snapshots
+				console.log(doc.id, doc.data().id);
+				if (doc.data().id === `${user.uid}`) {
+					userRef = doc.id;
+				}
+			});
+
+			const currentUserRef = collection(db, 'users', `${userRef}`, 'recipes');
+
+			await addDoc(currentUserRef, {
+				recipeId: recipeObject.id,
 				image: recipeObject.image,
 				title: recipeObject.title,
 				recipeCard: card,
 			});
+			// const docRef = await addDoc(collection(db, currentUser), {
+			// 	id: recipeObject.id,
+			// 	image: recipeObject.image,
+			// 	title: recipeObject.title,
+			// 	recipeCard: card,
+			// });
+			// console.log('write successful', docRef.id);
 		} catch (error) {
-			console.error('Error writing new message to Firebase Database', error);
+			console.log('error adding doc', error);
 		}
-	}
+	};
 	return (
-		// <div className={`w-full h-full bg[url(${props.api2Data.url})]`}>
-		// 	whyyyyy
-		// </div>
-
 		<>
 			{props.api2Data.url != undefined ? (
 				<div className='flex flex-col justify-center items-center'>

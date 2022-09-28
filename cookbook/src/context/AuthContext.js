@@ -8,6 +8,8 @@ import {
 	onAuthStateChanged,
 } from 'firebase/auth';
 import { auth } from '../components/firestore';
+import { getFirestore, collection, addDoc } from 'firebase/firestore';
+import { db } from '../components/firestore';
 
 const AuthContext = createContext();
 
@@ -15,7 +17,12 @@ export const AuthContextProvider = ({ children }) => {
 	const [user, setUser] = useState({});
 	const googleSignIn = () => {
 		const provider = new GoogleAuthProvider();
-		signInWithPopup(auth, provider);
+		signInWithPopup(auth, provider).then((cred) => {
+			return addDoc(collection(getFirestore(), 'users'), {
+				id: cred.user.uid,
+			});
+		});
+
 		// signInWithRedirect(auth, provider);
 	};
 

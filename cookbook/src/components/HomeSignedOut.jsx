@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import SignIn from './SignIn';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { UserAuth } from '../context/AuthContext';
+import { getFirestore, collection, addDoc } from 'firebase/firestore';
 
 // import foodPicture from '../brooke-lark-08bOYnH_r_E-unsplash.jpg';
 
@@ -16,7 +17,7 @@ const HomeSignedOut = (props) => {
 		try {
 			await googleSignIn();
 
-			console.log(user);
+			console.log(user.uid);
 		} catch (error) {
 			console.log(error);
 		}
