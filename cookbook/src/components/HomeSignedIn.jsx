@@ -1,46 +1,53 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { api } from './Api';
+import { searchResultRequest } from './Api';
+import { UserAuth } from '../context/AuthContext';
+import { FallingLines } from 'react-loader-spinner';
+// import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
+
 import {
 	getFirestore,
 	collection,
 	addDoc,
 	query,
-	orderBy,
 	limit,
 	onSnapshot,
 	setDoc,
 	updateDoc,
 	doc,
+	where,
 	serverTimestamp,
 	getDoc,
+	getDocs,
 } from 'firebase/firestore';
-import { render } from '@testing-library/react';
+import { db } from './firestore';
 
 const HomeSignedIn = (props) => {
-	let arr = [];
+	const { user } = UserAuth();
+	const [isLoading, setIsLoading] = useState(true);
 	const [recipes, setRecipes] = useState([]);
 
-	let navigate = useNavigate();
+	const navigate = useNavigate();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		let query = e.target.userInput.value;
 		let cleanedQuery = query.replace(/ /g, '_');
 		props.setSearchQuery(cleanedQuery);
-		props.setApiData(await api(cleanedQuery));
+		props.setApiData(await searchResultRequest(cleanedQuery));
 		navigate('/searchresults');
 	};
 
-	// // Loads chat messages history and listens for upcoming ones.
-	// function loadCookBook() {
-	// 	// Create the query to load the last 12 messages and listen for new ones.
+	const handleClick = (event) => {
+		// navigate('/recipeCard', { state: { }})
+		console.log(event.target);
+	};
+
+	// useEffect(() => {
 	// 	const cookBookQuery = query(
 	// 		collection(getFirestore(), 'recipes'),
-	// 		// orderBy('timestamp', 'desc'),
-	// 		limit(10)
+	// 		limit(50)
 	// 	);
-	// 	// Start listening to the query.
 	// 	onSnapshot(cookBookQuery, function (snapshot) {
 	// 		snapshot.docChanges().forEach(function (change) {
 	// 			if (change.type === 'removed') {
@@ -48,40 +55,83 @@ const HomeSignedIn = (props) => {
 	// 			} else {
 	// 				let recipe = change.doc.data();
 	// 				arr.push(recipe);
-
-	// 				// displayCookBook(recipe.id, recipe.image, recipe.title);
+	// 				setRecipes((prev) => [...prev, change.doc.data()]);
 	// 			}
 	// 		});
-	// 		console.log(arr);
 	// 	});
-	// }
+	// }, []);
 
 	useEffect(() => {
-		// Create the query to load the last 12 messages and listen for new ones.
-		const cookBookQuery = query(
-			collection(getFirestore(), 'recipes'),
-			// orderBy('timestamp'),
-			limit(50)
-		);
-		// Start listening to the query.
-		onSnapshot(cookBookQuery, function (snapshot) {
-			snapshot.docChanges().forEach(function (change) {
-				if (change.type === 'removed') {
-					//   deleteMessage(change.doc.id);
-				} else {
-					let recipe = change.doc.data();
-					arr.push(recipe);
-					setRecipes((prev) => [...prev, change.doc.data()]);
-					// console.log(change.doc.data());
-					// displayCookBook(recipe.id, recipe.image, recipe.title);
-				}
-			});
-		});
-	}, []);
+		// const cookBookQuery = query(
+		// 	collection(getFirestore(), 'users', `${user.uid}`, 'recipes'),
+		// 	limit(50)
+		// );
+		// onSnapshot(cookBookQuery, function (snapshot) {
+		// 	snapshot.docChanges().forEach(function (change) {
+		// 		if (change.type === 'removed') {
+		// 			//   deleteMessage(change.doc.id);
+		// 		} else {
+		// 			let recipe = change.doc.data();
+		// 			arr.push(recipe);
+		// 			setRecipes((prev) => [...prev, change.doc.data()]);
+		// 		}
+		// 	});
+		// });
+		const getRecipes = async () => {
+			let userRef;
+			try {
+				const currentUser = query(
+					collection(db, 'users'),
+					where('id', '==', `${user.uid}`)
+				);
 
+				const querySnapshot = await getDocs(currentUser);
+				querySnapshot.forEach((doc) => {
+					console.log(doc.id, doc.data().id);
+					if (doc.data().id === `${user.uid}`) {
+						userRef = doc.id;
+					}
+				});
+
+				const currentUserRef = collection(db, 'users', `${userRef}`, 'recipes');
+
+				const recipes = await getDocs(currentUserRef);
+				setIsLoading(false);
+
+				recipes.forEach((doc) => {
+					console.log(doc.id, '=>', doc.data());
+					setRecipes((prev) => [...prev, doc.data()]);
+				});
+
+				// const docRef = await addDoc(collection(db, currentUser), {
+				// 	id: recipeObject.id,
+				// 	image: recipeObject.image,
+				// 	title: recipeObject.title,
+				// 	recipeCard: card,
+				// });
+				// console.log('write successful', docRef.id);
+			} catch (error) {
+				console.log('error adding doc', error);
+			}
+		};
+		getRecipes();
+	}, [isLoading]);
+
+	if (isLoading) {
+		return (
+			<div className='h-full w-full flex justify-center items-center'>
+				<FallingLines
+					color='#65c3c8'
+					width='100'
+					visible={true}
+					ariaLabel='falling-lines-loading'
+				/>
+			</div>
+		);
+	}
 	return (
 		<>
-			<div className='h-[92%] flex flex-col items-center'>
+			<div className='h-full flex flex-col items-center'>
 				<div>
 					<form onSubmit={handleSubmit} className='form-control mt-10'>
 						<div className='input-group'>
@@ -115,11 +165,15 @@ const HomeSignedIn = (props) => {
 				</div>
 				<h1 className='text-3xl mt-4'>Your CookBook</h1>
 				{/* {loadCookBook()} */}
-				<div className='mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 content-center justify-items-center items-center gap-6'>
+
+				<div className='w-full mt-10 mb-6 grid justify-items-center items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6'>
 					{recipes.map((e) => {
 						return (
 							<div className='flex flex-col justify-center items-center border-2 p-4 rounded-md'>
-								<h3 className='text-lg text-blue-700 hover:cursor-pointer underline mb-4'>
+								<h3
+									className='text-lg text-blue-700 hover:cursor-pointer underline mb-4'
+									// onClick={handleClick}
+								>
 									{e.title}
 								</h3>
 								<img src={e.image} alt='food' />

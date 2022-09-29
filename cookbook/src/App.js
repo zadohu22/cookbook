@@ -9,6 +9,7 @@ const App = () => {
 	const { user } = UserAuth();
 
 	return (
+		// <div className='flex flex-col w-full h-full justify-center items-center'>
 		<>
 			<AuthContextProvider>
 				<Router>
@@ -17,6 +18,8 @@ const App = () => {
 				</Router>
 			</AuthContextProvider>
 		</>
+
+		// </div>
 	);
 };
 

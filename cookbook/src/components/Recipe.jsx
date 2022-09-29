@@ -1,30 +1,9 @@
-import React, { useState } from 'react';
-import { ingredients, instructions } from './Api';
-import {
-	getFirestore,
-	collection,
-	addDoc,
-	query,
-	orderBy,
-	limit,
-	onSnapshot,
-	setDoc,
-	updateDoc,
-	doc,
-	serverTimestamp,
-	where,
-	getDocs,
-} from 'firebase/firestore';
+import { collection, addDoc, query, where, getDocs } from 'firebase/firestore';
 import { UserAuth } from '../context/AuthContext';
 import { db } from './firestore';
 
 const Recipe = (props) => {
-	console.log(props.api2Data.url);
-	console.log(props.indexOfTargetRecipe);
-
 	const { user } = UserAuth();
-
-	console.log(typeof user.uid);
 
 	// async function saveRecipe(recipeObject, card) {
 	// 	// Add a new message entry to the Firebase database.
@@ -49,7 +28,6 @@ const Recipe = (props) => {
 
 			const querySnapshot = await getDocs(currentUser);
 			querySnapshot.forEach((doc) => {
-				// doc.data() is never undefined for query doc snapshots
 				console.log(doc.id, doc.data().id);
 				if (doc.data().id === `${user.uid}`) {
 					userRef = doc.id;
