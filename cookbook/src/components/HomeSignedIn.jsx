@@ -3,22 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { searchResultRequest } from './Api';
 import { UserAuth } from '../context/AuthContext';
 import { FallingLines } from 'react-loader-spinner';
-// import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
-
 import {
-	getFirestore,
 	collection,
-	addDoc,
 	query,
-	limit,
-	onSnapshot,
-	setDoc,
-	updateDoc,
-	doc,
 	where,
-	serverTimestamp,
-	getDoc,
 	getDocs,
+	deleteDoc,
+	doc,
 } from 'firebase/firestore';
 import { db } from './firestore';
 
@@ -33,50 +24,31 @@ const HomeSignedIn = (props) => {
 		e.preventDefault();
 		let query = e.target.userInput.value;
 		let cleanedQuery = query.replace(/ /g, '_');
+		localStorage.setItem('cleanedQuery', cleanedQuery);
+		localStorage.setItem('dirtyQuery', query);
 		props.setSearchQuery(cleanedQuery);
 		props.setApiData(await searchResultRequest(cleanedQuery));
 		navigate('/searchresults');
 	};
 
-	const handleClick = (event) => {
-		// navigate('/recipeCard', { state: { }})
-		console.log(event.target);
+	const handleClick = (recipeCard) => {
+		navigate('/recipeCard', { state: { card: recipeCard } });
+		console.log(recipeCard);
 	};
 
-	// useEffect(() => {
-	// 	const cookBookQuery = query(
-	// 		collection(getFirestore(), 'recipes'),
-	// 		limit(50)
-	// 	);
-	// 	onSnapshot(cookBookQuery, function (snapshot) {
-	// 		snapshot.docChanges().forEach(function (change) {
-	// 			if (change.type === 'removed') {
-	// 				//   deleteMessage(change.doc.id);
-	// 			} else {
-	// 				let recipe = change.doc.data();
-	// 				arr.push(recipe);
-	// 				setRecipes((prev) => [...prev, change.doc.data()]);
-	// 			}
-	// 		});
-	// 	});
-	// }, []);
+	const handleDelete = async (index) => {
+		console.log(index);
+		let target = recipes[index].recipeId;
+		let string = target.toString();
+
+		try {
+			let testRef = collection('users', `${user.uid}`).doc('');
+		} catch (error) {
+			console.log('error deleting from database', error);
+		}
+	};
 
 	useEffect(() => {
-		// const cookBookQuery = query(
-		// 	collection(getFirestore(), 'users', `${user.uid}`, 'recipes'),
-		// 	limit(50)
-		// );
-		// onSnapshot(cookBookQuery, function (snapshot) {
-		// 	snapshot.docChanges().forEach(function (change) {
-		// 		if (change.type === 'removed') {
-		// 			//   deleteMessage(change.doc.id);
-		// 		} else {
-		// 			let recipe = change.doc.data();
-		// 			arr.push(recipe);
-		// 			setRecipes((prev) => [...prev, change.doc.data()]);
-		// 		}
-		// 	});
-		// });
 		const getRecipes = async () => {
 			let userRef;
 			try {
@@ -95,21 +67,13 @@ const HomeSignedIn = (props) => {
 
 				const currentUserRef = collection(db, 'users', `${userRef}`, 'recipes');
 
-				const recipes = await getDocs(currentUserRef);
-				setIsLoading(false);
+				const listOfRecipes = await getDocs(currentUserRef);
 
-				recipes.forEach((doc) => {
-					console.log(doc.id, '=>', doc.data());
+				setRecipes([]);
+				listOfRecipes.forEach((doc) => {
 					setRecipes((prev) => [...prev, doc.data()]);
 				});
-
-				// const docRef = await addDoc(collection(db, currentUser), {
-				// 	id: recipeObject.id,
-				// 	image: recipeObject.image,
-				// 	title: recipeObject.title,
-				// 	recipeCard: card,
-				// });
-				// console.log('write successful', docRef.id);
+				setIsLoading(false);
 			} catch (error) {
 				console.log('error adding doc', error);
 			}
@@ -117,11 +81,12 @@ const HomeSignedIn = (props) => {
 		getRecipes();
 	}, [isLoading]);
 
+	console.log(recipes);
 	if (isLoading) {
 		return (
 			<div className='h-full w-full flex justify-center items-center'>
 				<FallingLines
-					color='#65c3c8'
+					color='#3abff8'
 					width='100'
 					visible={true}
 					ariaLabel='falling-lines-loading'
@@ -164,25 +129,41 @@ const HomeSignedIn = (props) => {
 					</form>
 				</div>
 				<h1 className='text-3xl mt-4'>Your CookBook</h1>
-				{/* {loadCookBook()} */}
 
-				<div className='w-full mt-10 mb-6 grid justify-items-center items-center grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6'>
-					{recipes.map((e) => {
-						return (
-							<div className='flex flex-col justify-center items-center border-2 p-4 rounded-md'>
-								<h3
-									className='text-lg text-blue-700 hover:cursor-pointer underline mb-4'
-									// onClick={handleClick}
+				<div className='w-full mt-10 mb-6 grid justify-items-center items-center grid-cols-1 small:grid-cols-2 md:grid-cols-3 gap-6'>
+					{recipes.length === 0 ? (
+						<div className='flex w-full justify-center items-center text-center col-span-3'>
+							<h1>
+								You haven't added any recipes yet, search for recipes above!
+							</h1>
+						</div>
+					) : (
+						recipes.map((e, i) => {
+							return (
+								<div
+									key={i}
+									className='flex flex-col h-[360px] justify-center items-center border-2 p-4 rounded-md max-w-[350px]'
 								>
-									{e.title}
-								</h3>
-								<img src={e.image} alt='food' />
-							</div>
-						);
-					})}
+									<h3
+										className='text-sm font-bold text-center text-[#3abff8] hover:cursor-pointer underline mb-4'
+										onClick={() => handleClick(e.recipeCard)}
+									>
+										{e.title}
+									</h3>
+									<img src={e.image} alt='food' className='max-w-[350px]' />
+									<button
+										key={i}
+										class='btn btn-sm btn-primary btn-outline mt-4'
+										onClick={() => handleDelete(i)}
+									>
+										Delete Recipe
+									</button>
+								</div>
+							);
+						})
+					)}
 				</div>
 			</div>
-			{/* <Api /> */}
 		</>
 	);
 };

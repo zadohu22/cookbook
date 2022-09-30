@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import HomeSignedIn from './HomeSignedIn';
 import HomeSignedOut from './HomeSignedOut';
 import SearchResults from './SearchResults';
+import RecipeCard from './RecipeCard';
 import Recipe from './Recipe';
 import Protected from './Protected';
 
@@ -54,6 +55,15 @@ const RouteSwitch = (props) => {
 							indexOfTargetRecipe={indexOfTargetRecipe}
 							idOfTargetRecipe={idOfTargetRecipe}
 						/>
+					</Protected>
+				}
+			/>
+
+			<Route
+				path='/recipeCard'
+				element={
+					<Protected>
+						<RecipeCard />
 					</Protected>
 				}
 			/>

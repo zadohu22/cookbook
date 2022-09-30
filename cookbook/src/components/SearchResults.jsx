@@ -1,18 +1,29 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from 'react';
-import { recipeCardRequest } from './Api';
+import React, { useEffect, useState } from 'react';
+import { recipeCardRequest, searchResultRequest } from './Api';
 import { useNavigate } from 'react-router-dom';
 
 const SearchResults = (props) => {
 	const navigate = useNavigate();
-	console.log(props.apiData);
+	const [searchData, setSearchData] = useState([]);
+	const cleanedQuery = localStorage.getItem('cleanedQuery');
+	const dirtyQuery = localStorage.getItem('dirtyQuery');
+
+	useEffect(() => {
+		const searchRecipes = async () => {
+			let response = await searchResultRequest(cleanedQuery);
+			setSearchData(response);
+		};
+		searchRecipes();
+	}, []);
 
 	const handleClick = async (id, index) => {
 		props.setApi2Data(await recipeCardRequest(id));
 		props.setIndexOfTargetRecipe(props.apiData[index]);
 		navigate('/recipe');
 	};
-	const info = props.apiData.map((element, index) => (
+
+	const info = searchData.map((element, index) => (
 		<div className='flex flex-col justify-center items-center'>
 			<img
 				src={element.image}
@@ -29,8 +40,8 @@ const SearchResults = (props) => {
 	));
 
 	return (
-		<div className='flex flex-col gap-2'>
-			<p>search results for {props.searchQuery}</p>
+		<div className='flex flex-col gap-2 justify-center items-center mt-6'>
+			<p className='text-xl'>Search results for: {dirtyQuery}</p>
 			<div className='h-full w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 justify-center items-center'>
 				{info}
 			</div>

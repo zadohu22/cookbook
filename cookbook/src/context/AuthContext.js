@@ -24,6 +24,7 @@ export const AuthContextProvider = ({ children }) => {
 	const googleSignIn = () => {
 		const provider = new GoogleAuthProvider();
 		signInWithPopup(auth, provider).then((cred) => {
+			let userExists = false;
 			const exists = async () => {
 				const currentUser = query(
 					collection(db, 'users'),
@@ -31,20 +32,20 @@ export const AuthContextProvider = ({ children }) => {
 				);
 
 				const querySnapshot = await getDocs(currentUser);
+
 				querySnapshot.forEach((doc) => {
-					// if doc.data().id === user.uid set some varaible to true
-
-					// then only add to collection if that variable is true
-
-					//or something. try to avoid doing it that way probably..
-					console.log(doc.id, doc.data().id);
+					if (doc.data().id === cred.user.uid) {
+						userExists = true;
+						console.log('USER EXISTS', userExists);
+					}
 				});
+				if (userExists === false) {
+					addDoc(collection(getFirestore(), 'users'), {
+						id: cred.user.uid,
+					});
+				}
 			};
 			exists();
-
-			return addDoc(collection(getFirestore(), 'users'), {
-				id: cred.user.uid,
-			});
 		});
 
 		// signInWithRedirect(auth, provider);

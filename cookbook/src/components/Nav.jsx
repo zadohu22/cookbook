@@ -34,14 +34,17 @@ const Nav = (props) => {
 	// });
 	return (
 		<>
-			<div className='navbar bg-primary text-primary-content flex h-[5%] justify-between'>
+			<div className='navbar sticky top-0 z-10 bg-primary text-primary-content flex h-[5%] justify-between'>
 				<a
-					className='btn btn-ghost normal-case text-xl'
+					className='btn btn-ghost normal-case text-xl rounded-md'
 					onClick={handleRouteClick}
 				>
 					CookBook
 				</a>
-				<a onClick={handleClick} className='btn btn-ghost normal-case text-xl'>
+				<a
+					onClick={handleClick}
+					className='btn btn-ghost normal-case text-xl rounded-md'
+				>
 					Sign Out
 				</a>
 			</div>
