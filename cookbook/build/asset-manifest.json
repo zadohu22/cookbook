@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/static/css/main.accce566.css",
+    "main.js": "/static/js/main.3f717e82.js",
+    "static/media/brooke-lark-08bOYnH_r_E-unsplash.jpg": "/static/media/brooke-lark-08bOYnH_r_E-unsplash.d0ff4bc9608bc7ab7df8.jpg",
+    "index.html": "/index.html",
+    "main.accce566.css.map": "/static/css/main.accce566.css.map",
+    "main.3f717e82.js.map": "/static/js/main.3f717e82.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.accce566.css",
+    "static/js/main.3f717e82.js"
+  ]
+}
