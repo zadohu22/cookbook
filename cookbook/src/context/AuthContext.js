@@ -25,7 +25,7 @@ export const AuthContextProvider = ({ children }) => {
 		const provider = new GoogleAuthProvider();
 		signInWithPopup(auth, provider).then((cred) => {
 			let userExists = false;
-			const exists = async () => {
+			const checkIfUserExists = async () => {
 				const currentUser = query(
 					collection(db, 'users'),
 					where('id', '==', `${cred.user.uid}`)
@@ -45,7 +45,7 @@ export const AuthContextProvider = ({ children }) => {
 					});
 				}
 			};
-			exists();
+			checkIfUserExists();
 		});
 
 		// signInWithRedirect(auth, provider);

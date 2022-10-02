@@ -33,18 +33,36 @@ const HomeSignedIn = (props) => {
 
 	const handleClick = (recipeCard) => {
 		navigate('/recipeCard', { state: { card: recipeCard } });
-		console.log(recipeCard);
 	};
 
 	const handleDelete = async (index) => {
-		console.log(index);
-		let target = recipes[index].recipeId;
-		let string = target.toString();
-
+		let userRef;
+		let targetRecipe = recipes[index].recipeId;
 		try {
-			let testRef = collection('users', `${user.uid}`).doc('');
+			const currentUser = query(
+				collection(db, 'users'),
+				where('id', '==', `${user.uid}`)
+			);
+
+			const querySnapshot = await getDocs(currentUser);
+			querySnapshot.forEach((doc) => {
+				if (doc.data().id === `${user.uid}`) {
+					userRef = `${doc.id}`;
+				}
+			});
+
+			const currentUserRef = collection(db, 'users', `${userRef}`, 'recipes');
+
+			const listOfRecipes = await getDocs(currentUserRef);
+			listOfRecipes.forEach(async (recipe) => {
+				if (`${recipe.data().recipeId}` === `${targetRecipe}`) {
+					await deleteDoc(doc(db, 'users', `${userRef}`, 'recipes', recipe.id));
+					let filtered = recipes.filter((_, i) => i !== index);
+					setRecipes(filtered);
+				}
+			});
 		} catch (error) {
-			console.log('error deleting from database', error);
+			console.log('error deleting', error);
 		}
 	};
 
@@ -81,7 +99,6 @@ const HomeSignedIn = (props) => {
 		getRecipes();
 	}, [isLoading]);
 
-	console.log(recipes);
 	if (isLoading) {
 		return (
 			<div className='h-full w-full flex justify-center items-center'>
@@ -153,7 +170,7 @@ const HomeSignedIn = (props) => {
 									<img src={e.image} alt='food' className='max-w-[350px]' />
 									<button
 										key={i}
-										class='btn btn-sm btn-primary btn-outline mt-4'
+										className='btn btn-sm btn-primary btn-outline mt-4'
 										onClick={() => handleDelete(i)}
 									>
 										Delete Recipe
