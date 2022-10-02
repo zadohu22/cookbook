@@ -1,9 +1,10 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from 'react';
 import { recipeCardRequest, searchResultRequest } from './Api';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const SearchResults = (props) => {
+	const location = useLocation();
 	const navigate = useNavigate();
 	const [searchData, setSearchData] = useState([]);
 	const cleanedQuery = localStorage.getItem('cleanedQuery');
@@ -20,29 +21,27 @@ const SearchResults = (props) => {
 	const handleClick = async (id, index) => {
 		props.setApi2Data(await recipeCardRequest(id));
 		props.setIndexOfTargetRecipe(props.apiData[index]);
-		navigate('/recipe');
+		navigate('/recipe', {
+			state: { recipeArr: location.state.recipeArr },
+		});
 	};
 
 	const info = searchData.map((element, index) => (
-		<div className='flex flex-col justify-center items-center'>
-			<img
-				src={element.image}
-				className='h-52 w-52 object-contain'
-				alt='search results'
-			/>
+		<div className='flex flex-col h-[360px] justify-center items-center border-2 p-4 rounded-md max-w-[350px]'>
 			<h3
 				onClick={async () => await handleClick(element.id, index)}
-				className='text-blue-600 text=xl underline cursor-pointer'
+				className='text-sm font-bold text-center text-[#3abff8] hover:cursor-pointer underline mb-4'
 			>
 				{element.title}
 			</h3>
+			<img src={element.image} className='max-w-[350px]' alt='search results' />
 		</div>
 	));
 
 	return (
 		<div className='flex flex-col gap-2 justify-center items-center mt-6'>
 			<p className='text-xl'>Search results for: {dirtyQuery}</p>
-			<div className='h-full w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 justify-center items-center'>
+			<div className='w-full mt-10 mb-6 grid justify-items-center items-center grid-cols-1 small:grid-cols-2 md:grid-cols-3 gap-6'>
 				{info}
 			</div>
 		</div>

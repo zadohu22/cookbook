@@ -1,9 +1,11 @@
 import { collection, addDoc, query, where, getDocs } from 'firebase/firestore';
 import { UserAuth } from '../context/AuthContext';
 import { db } from './firestore';
+import { useLocation } from 'react-router-dom';
 
 const Recipe = (props) => {
 	const { user } = UserAuth();
+	const location = useLocation();
 
 	// async function saveRecipe(recipeObject, card) {
 	// 	// Add a new message entry to the Firebase database.
@@ -35,13 +37,21 @@ const Recipe = (props) => {
 			});
 
 			const currentUserRef = collection(db, 'users', `${userRef}`, 'recipes');
-
-			await addDoc(currentUserRef, {
-				recipeId: recipeObject.id,
-				image: recipeObject.image,
-				title: recipeObject.title,
-				recipeCard: card,
+			let includes = false;
+			location.state.recipeArr.forEach((element) => {
+				if (element.recipeId === recipeObject.id) {
+					includes = true;
+				}
 			});
+			if (includes === false) {
+				await addDoc(currentUserRef, {
+					recipeId: recipeObject.id,
+					image: recipeObject.image,
+					title: recipeObject.title,
+					recipeCard: card,
+				});
+			}
+
 			// const docRef = await addDoc(collection(db, currentUser), {
 			// 	id: recipeObject.id,
 			// 	image: recipeObject.image,

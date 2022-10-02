@@ -28,11 +28,15 @@ const HomeSignedIn = (props) => {
 		localStorage.setItem('dirtyQuery', query);
 		props.setSearchQuery(cleanedQuery);
 		props.setApiData(await searchResultRequest(cleanedQuery));
-		navigate('/searchresults');
+		navigate('/searchresults', {
+			state: { recipeArr: recipes },
+		});
 	};
 
 	const handleClick = (recipeCard) => {
-		navigate('/recipeCard', { state: { card: recipeCard } });
+		navigate('/recipeCard', {
+			state: { card: recipeCard },
+		});
 	};
 
 	const handleDelete = async (index) => {
