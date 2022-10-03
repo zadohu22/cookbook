@@ -1,11 +1,11 @@
+import { useState } from 'react';
 import { collection, addDoc, query, where, getDocs } from 'firebase/firestore';
 import { UserAuth } from '../context/AuthContext';
 import { db } from './firestore';
-import { useLocation } from 'react-router-dom';
 
 const Recipe = (props) => {
 	const { user } = UserAuth();
-	const location = useLocation();
+	const [recipeExists, setRecipeExists] = useState(false);
 
 	// async function saveRecipe(recipeObject, card) {
 	// 	// Add a new message entry to the Firebase database.
@@ -37,13 +37,13 @@ const Recipe = (props) => {
 			});
 
 			const currentUserRef = collection(db, 'users', `${userRef}`, 'recipes');
-			let includes = false;
-			location.state.recipeArr.forEach((element) => {
-				if (element.recipeId === recipeObject.id) {
-					includes = true;
+			const listOfRecipes = await getDocs(currentUserRef);
+			listOfRecipes.forEach((element) => {
+				if (element.data().recipeId === recipeObject.id) {
+					setRecipeExists(true);
 				}
 			});
-			if (includes === false) {
+			if (recipeExists === false) {
 				await addDoc(currentUserRef, {
 					recipeId: recipeObject.id,
 					image: recipeObject.image,
@@ -51,27 +51,19 @@ const Recipe = (props) => {
 					recipeCard: card,
 				});
 			}
-
-			// const docRef = await addDoc(collection(db, currentUser), {
-			// 	id: recipeObject.id,
-			// 	image: recipeObject.image,
-			// 	title: recipeObject.title,
-			// 	recipeCard: card,
-			// });
-			// console.log('write successful', docRef.id);
 		} catch (error) {
 			console.log('error adding doc', error);
 		}
 	};
 	return (
 		<>
-			{props.api2Data.url != undefined ? (
+			{props.api2Data.url !== undefined ? (
 				<div className='flex flex-col justify-center items-center'>
 					<button
 						onClick={() =>
 							saveRecipe(props.indexOfTargetRecipe, props.api2Data.url)
 						}
-						className='btn btn-primary text-2xl rounded:md w-2/5 mt-8 mb-8'
+						className='btn btn-primary text-2xl rounded:md w-2/5 mt-8 mb-8 h-auto'
 					>
 						Add To CookBook
 					</button>
