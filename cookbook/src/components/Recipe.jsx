@@ -34,7 +34,7 @@ const Recipe = (props) => {
 						onClick={() =>
 							saveRecipe(props.indexOfTargetRecipe, props.api2Data.url)
 						}
-						className='btn btn-primary text-2xl rounded:md w-2/5 mt-8 mb-8'
+						className='btn btn-primary h-auto text-2xl rounded:md w-2/5 mt-8 mb-8'
 					>
 						Add To CookBook
 					</button>
