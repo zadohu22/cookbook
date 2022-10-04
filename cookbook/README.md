@@ -4,6 +4,7 @@ Sometimes the recipe won't link to a recipe card, and I'll give you a little err
 The API doesn't like certain recipes for some reason. I'm working on manually setting the ingredients and cooking steps instead of using the "recipe card" option that the API offers, as it's unreliable. 
 
 Things that I've learned with this project:
+
 -- Working with a database! This is my first attempt at really using a database in a project. (I used Firebase).
 
 -- Basic Authentication
