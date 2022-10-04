@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { UserAuth } from '../context/AuthContext';
 
 const Nav = (props) => {
-	const { logOut, user } = UserAuth();
+	const { logOut } = UserAuth();
 	const navigate = useNavigate();
 	const handleClick = async () => {
 		try {
@@ -12,26 +12,12 @@ const Nav = (props) => {
 		} catch (error) {
 			console.log(error);
 		}
-		console.log('logout', user);
-		// await props.setIsLoggedIn(false);
 		navigate('/');
 	};
 
 	const handleRouteClick = () => {
 		navigate('/home');
 	};
-
-	// const auth = getAuth();
-	// onAuthStateChanged(auth, (user) => {
-	// 	if (user) {
-	// 		// User is signed in, see docs for a list of available properties
-	// 		// https://firebase.google.com/docs/reference/js/firebase.User
-	// 		const uid = user.uid;
-	// 		console.log(uid);
-	// 	} else {
-	// 		console.log('not signed in');
-	// 	}
-	// });
 	return (
 		<>
 			<div className='navbar sticky top-0 z-10 bg-primary text-primary-content flex h-[5%] justify-between'>

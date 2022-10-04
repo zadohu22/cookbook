@@ -13,9 +13,6 @@ const searchResultRequest = async (query) => {
 };
 
 const recipeCardRequest = async (id) => {
-	// let request = await fetch(
-	// 	`https://api.spoonacular.com/recipes/${id}/information?apiKey=${apiKey}&includeNutrition=false`
-	// );
 	let request = await fetch(
 		`https://api.spoonacular.com/recipes/${id}/card?apiKey=${apiKey}`
 	);

@@ -47,8 +47,6 @@ export const AuthContextProvider = ({ children }) => {
 			};
 			checkIfUserExists();
 		});
-
-		// signInWithRedirect(auth, provider);
 	};
 
 	const logOut = () => {

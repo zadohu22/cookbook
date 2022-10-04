@@ -1,10 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from 'react';
 import { recipeCardRequest, searchResultRequest } from './Api';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const SearchResults = (props) => {
-	const location = useLocation();
 	const navigate = useNavigate();
 	const [searchData, setSearchData] = useState([]);
 	const cleanedQuery = localStorage.getItem('cleanedQuery');
@@ -21,9 +20,7 @@ const SearchResults = (props) => {
 	const handleClick = async (id, index) => {
 		props.setApi2Data(await recipeCardRequest(id));
 		props.setIndexOfTargetRecipe(props.apiData[index]);
-		navigate('/recipe', {
-			state: { recipeArr: location.state.recipeArr },
-		});
+		navigate('/recipe');
 	};
 
 	const info = searchData.map((element, index) => (

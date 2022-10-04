@@ -3,20 +3,30 @@ import { useNavigate } from 'react-router-dom';
 import { searchResultRequest } from './Api';
 import { UserAuth } from '../context/AuthContext';
 import { FallingLines } from 'react-loader-spinner';
-import {
-	collection,
-	query,
-	where,
-	getDocs,
-	deleteDoc,
-	doc,
-} from 'firebase/firestore';
+import { deleteDoc, doc } from 'firebase/firestore';
 import { db } from './firestore';
+import { getRecipesFromDb } from '../db';
 
 const HomeSignedIn = (props) => {
-	const { user } = UserAuth();
 	const [isLoading, setIsLoading] = useState(true);
 	const [recipes, setRecipes] = useState([]);
+	const { user } = UserAuth();
+
+	useEffect(() => {
+		const getRecipes = async () => {
+			let listOfRecipes = await getRecipesFromDb(user);
+			try {
+				setRecipes([]);
+				listOfRecipes[0].forEach((doc) => {
+					setRecipes((prev) => [...prev, doc.data()]);
+				});
+				setIsLoading(false);
+			} catch (error) {
+				console.log('error adding doc', error);
+			}
+		};
+		getRecipes();
+	}, [isLoading]);
 
 	const navigate = useNavigate();
 
@@ -40,68 +50,17 @@ const HomeSignedIn = (props) => {
 	};
 
 	const handleDelete = async (index) => {
-		let userRef;
-		let targetRecipe = recipes[index].recipeId;
-		try {
-			const currentUser = query(
-				collection(db, 'users'),
-				where('id', '==', `${user.uid}`)
-			);
-
-			const querySnapshot = await getDocs(currentUser);
-			querySnapshot.forEach((doc) => {
-				if (doc.data().id === `${user.uid}`) {
-					userRef = `${doc.id}`;
-				}
-			});
-
-			const currentUserRef = collection(db, 'users', `${userRef}`, 'recipes');
-
-			const listOfRecipes = await getDocs(currentUserRef);
-			listOfRecipes.forEach(async (recipe) => {
-				if (`${recipe.data().recipeId}` === `${targetRecipe}`) {
-					await deleteDoc(doc(db, 'users', `${userRef}`, 'recipes', recipe.id));
-					let filtered = recipes.filter((_, i) => i !== index);
-					setRecipes(filtered);
-				}
-			});
-		} catch (error) {
-			console.log('error deleting', error);
-		}
-	};
-
-	useEffect(() => {
-		const getRecipes = async () => {
-			let userRef;
-			try {
-				const currentUser = query(
-					collection(db, 'users'),
-					where('id', '==', `${user.uid}`)
+		let listOfRecipes = await getRecipesFromDb(user);
+		listOfRecipes[0].forEach(async (recipe) => {
+			if (`${recipe.data().recipeId}` === `${recipes[index].recipeId}`) {
+				await deleteDoc(
+					doc(db, 'users', listOfRecipes[1], 'recipes', recipe.id)
 				);
-
-				const querySnapshot = await getDocs(currentUser);
-				querySnapshot.forEach((doc) => {
-					console.log(doc.id, doc.data().id);
-					if (doc.data().id === `${user.uid}`) {
-						userRef = doc.id;
-					}
-				});
-
-				const currentUserRef = collection(db, 'users', `${userRef}`, 'recipes');
-
-				const listOfRecipes = await getDocs(currentUserRef);
-
-				setRecipes([]);
-				listOfRecipes.forEach((doc) => {
-					setRecipes((prev) => [...prev, doc.data()]);
-				});
-				setIsLoading(false);
-			} catch (error) {
-				console.log('error adding doc', error);
+				let filtered = recipes.filter((_, i) => i !== index);
+				setRecipes(filtered);
 			}
-		};
-		getRecipes();
-	}, [isLoading]);
+		});
+	};
 
 	if (isLoading) {
 		return (
