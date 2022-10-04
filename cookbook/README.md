@@ -1,70 +1,21 @@
-# Getting Started with Create React App
+Sign in, search for recipes, add them if you want, then delete them if they're gross. :)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Sometimes the recipe won't link to a recipe card, and I'll give you a little error message :(
+The API doesn't like certain recipes for some reason. I'm working on manually setting the ingredients and cooking steps instead of using the "recipe card" option that the API offers, as it's unreliable. 
 
-## Available Scripts
+Things that I've learned with this project:
+-- Working with a database! This is my first attempt at really using a database in a project. (I used Firebase).
 
-In the project directory, you can run:
+-- Basic Authentication
 
-### `npm start`
+-- How to give each user their own 'collection', so that the documents will be saved only to the user that's logged in, and every user will have their own unique collection. 
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+-- How to delete documents specific to the user that is currently logged in, without affecting any other users documents in the database. 
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+-- How to check the database for existing documents, and not allow duplicate documents to be created. (Which makes sense for this specific project).
 
-### `npm test`
+-- How to access and modify nested collections/documents. For example: collection(users) > document(currentlySignedInUser) > subCollection(recipes) > document(specificRecipe)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+-- Refactoring? I tried to DRY with my DB reads/writes by exporting the repeatable logic into separate functions. I'm still looking in to this. 
 
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+-- CSS/Tailwind because...I mean come on it's CSS, is there anyone that has made a project without having a fist fight with CSS?
