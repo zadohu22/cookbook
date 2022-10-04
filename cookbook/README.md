@@ -19,4 +19,4 @@ Things that I've learned with this project:
 
 -- Refactoring? I tried to DRY with my DB reads/writes by exporting the repeatable logic into separate functions. I'm still looking in to this. 
 
--- CSS/Tailwind because...I mean come on it's CSS, is there anyone that has made a project without having a fist fight with CSS?
+-- CSS/Tailwind because...It's a never ending battle. 
