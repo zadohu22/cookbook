@@ -10,8 +10,6 @@ const Recipe = (props) => {
 	const saveRecipe = async (recipeObject, card) => {
 		try {
 			const listOfRecipes = await getRecipesFromDb(user);
-			console.log(listOfRecipes[0], listOfRecipes[1], listOfRecipes[2]);
-
 			listOfRecipes[0].forEach((element) => {
 				if (element.data().recipeId === recipeObject.id) {
 					includes = true;
@@ -66,11 +64,6 @@ const Recipe = (props) => {
 							</div>
 						)}
 					</div>
-					{clicked && includes === true && (
-						<h3 className='text-md text-white'>
-							This recipe is already in your cookbook!
-						</h3>
-					)}
 
 					<img
 						src={props.api2Data.url}

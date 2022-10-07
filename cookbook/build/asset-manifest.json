@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/static/css/main.13bc3f89.css",
-    "main.js": "/static/js/main.ea9205aa.js",
+    "main.css": "/static/css/main.27d7038a.css",
+    "main.js": "/static/js/main.96e5a245.js",
     "static/media/brooke-lark-08bOYnH_r_E-unsplash.jpg": "/static/media/brooke-lark-08bOYnH_r_E-unsplash.d0ff4bc9608bc7ab7df8.jpg",
     "index.html": "/index.html",
-    "main.13bc3f89.css.map": "/static/css/main.13bc3f89.css.map",
-    "main.ea9205aa.js.map": "/static/js/main.ea9205aa.js.map"
+    "main.27d7038a.css.map": "/static/css/main.27d7038a.css.map",
+    "main.96e5a245.js.map": "/static/js/main.96e5a245.js.map"
   },
   "entrypoints": [
-    "static/css/main.13bc3f89.css",
-    "static/js/main.ea9205aa.js"
+    "static/css/main.27d7038a.css",
+    "static/js/main.96e5a245.js"
   ]
 }
