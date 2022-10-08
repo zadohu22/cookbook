@@ -36,7 +36,6 @@ export const AuthContextProvider = ({ children }) => {
 				querySnapshot.forEach((doc) => {
 					if (doc.data().id === cred.user.uid) {
 						userExists = true;
-						console.log('USER EXISTS', userExists);
 					}
 				});
 				if (userExists === false) {

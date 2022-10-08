@@ -30,7 +30,7 @@ const Recipe = (props) => {
 	};
 	return (
 		<>
-			{props.api2Data.url != undefined ? (
+			{props.api2Data.url !== undefined ? (
 				<div className='flex flex-col justify-center items-center'>
 					<div className='flex gap-2 w-full justify-center items-center'>
 						<button

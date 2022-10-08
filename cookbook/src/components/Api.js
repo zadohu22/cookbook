@@ -30,7 +30,7 @@ const recipeCardRequest = async (id) => {
 // 	// let steps = response[0].steps;
 // 	let ingredientsArray = [];
 // 	let ingredients = response.ingredients.map((e) => {
-// 		console.log(e.amount.us.value, e.amount.us.unit, e.name);
+//
 // 		ingredientsArray.push([e.amount.us.value, e.amount.us.unit, e.name]);
 // 	});
 // 	return ingredientsArray;

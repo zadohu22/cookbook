@@ -10,8 +10,6 @@ const HomeSignedOut = (props) => {
 	const handleGoogleSignIn = async () => {
 		try {
 			await googleSignIn();
-
-			console.log(user.uid);
 		} catch (error) {
 			console.log(error);
 		}
@@ -21,8 +19,7 @@ const HomeSignedOut = (props) => {
 		if (user != null) {
 			navigate('/home');
 		}
-		console.log(user);
-	}, [user]);
+	}, [navigate, user]);
 
 	return (
 		<>

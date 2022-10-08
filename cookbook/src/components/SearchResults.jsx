@@ -15,7 +15,7 @@ const SearchResults = (props) => {
 			setSearchData(response);
 		};
 		searchRecipes();
-	}, []);
+	}, [cleanedQuery]);
 
 	const handleClick = async (id, index) => {
 		props.setApi2Data(await recipeCardRequest(id));
@@ -24,7 +24,10 @@ const SearchResults = (props) => {
 	};
 
 	const info = searchData.map((element, index) => (
-		<div className='flex flex-col h-[360px] justify-center items-center border-2 p-4 rounded-md max-w-[350px]'>
+		<div
+			key={element.id}
+			className='flex flex-col h-[360px] justify-center items-center border-2 p-4 rounded-md max-w-[350px]'
+		>
 			<h3
 				onClick={async () => await handleClick(element.id, index)}
 				className='text-sm font-bold text-center text-[#3abff8] hover:cursor-pointer underline mb-4'
