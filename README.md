@@ -7,18 +7,6 @@ The API doesn't like certain recipes for some reason. I'm working on manually se
 
 Things that I've learned with this project:
 
--- Working with a database! This is my first attempt at really using a database in a project. (I used Firebase).
+-- How to work with a database. 
 
 -- Basic Authentication
-
--- How to give each user their own 'collection', so that the documents will be saved only to the user that's logged in, and every user will have their own unique collection. 
-
--- How to delete documents specific to the user that is currently logged in, without affecting any other users documents in the database. 
-
--- How to check the database for existing documents, and not allow duplicate documents to be created. (Which makes sense for this specific project).
-
--- How to access and modify nested collections/documents. For example: collection(users) > document(currentlySignedInUser) > subCollection(recipes) > document(specificRecipe)
-
--- Refactoring? I tried to DRY with my DB reads/writes by exporting the repeatable logic into separate functions. I'm still looking in to this. 
-
--- CSS/Tailwind because...It's a never ending battle. 
